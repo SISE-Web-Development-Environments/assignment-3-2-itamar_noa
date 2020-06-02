@@ -9,25 +9,27 @@ router.use((req,res,next)=>{
     next();
 });
 
-router.get("/search/query/:searchQuery/amount/:num",(req,res)=>{
-const{ searchQuery,num} = req.params;
-search_params = {};
-search_params.query = searchQuery;
-search_params.number = num;
-search_params.instructionsRequired = true;
+router.get('/search/query/:searchQuery/amount/:num', (req, res, next) => {
+    const { searchQuery, num } = req.params;
+    console.log(req.params);
+    // set search params
+    search_params = {};
+    search_params.query = searchQuery;
+    search_params.number = num;
+    search_params.instructionsRequired = true;
 
-console.log(req.query);
-search_util.extractQueriesParams(req.query,search_params);
+    console.log(req.query);
 
-search_util
-    .searchForRecipes(searchQuery,num,search_params)
-    .then((info_array)=>res.send(info_array))
-    .catch((error)=>{
-        console.log(error);
-        res.sendStatus(500);
-    });
+    search_util.extractQueriesParams(req.query,search_params);
 
+    search_util
+    .searchForRecipes(search_params)
+    .then((info_array) => res.status(200).send(info_array))
+    .catch(function (error) {
+        next(error);
+      });
 });
+
 module.exports = router;
 
 

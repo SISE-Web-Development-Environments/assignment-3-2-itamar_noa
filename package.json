@@ -20,6 +20,7 @@
     "express": "^4.17.1",
     "express-async-errors": "^3.1.1",
     "express-async-handler": "^1.1.4",
+    "express-session": "^1.17.1",
     "morgan": "^1.10.0",
     "mssql": "^6.2.0",
     "request": "^2.88.2",

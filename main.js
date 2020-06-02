@@ -2,7 +2,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
-const session = require("client-sessions");
+var session = require('express-session');
+var cookieParser = require("cookie-parser")
+
 
 
 // Application settings
@@ -10,6 +12,8 @@ const app = express();
 const port = 3000;
 
 
+app.use(cookieParser());
+app.use(session({secret: "This is a secret"}));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 // app.use(morgan(":method url :status :response-time ms"));
