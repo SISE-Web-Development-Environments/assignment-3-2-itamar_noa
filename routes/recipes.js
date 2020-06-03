@@ -30,7 +30,6 @@ router.get('/search/query/:searchQuery/amount/:num', (req, res, next) => {
       });
 });
 
-module.exports = router;
 
 
 // router.get("/Information", async (req, res, next) => {

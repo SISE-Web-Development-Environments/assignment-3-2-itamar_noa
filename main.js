@@ -9,7 +9,7 @@ var cookieParser = require("cookie-parser")
 
 // Application settings
 const app = express();
-const port = 3000;
+const port = 5000;
 
 
 app.use(cookieParser());
@@ -30,7 +30,7 @@ app.use(bodyParser.json());
 // const auth = require("./routes/auth");
 const user = require("./routes/user");
 const recipes = require("./routes/recipes");
-
+const guest = require("./routes/guest")
 
 // For checking server availabilty
 app.get("/alive",(req,res) => {
@@ -41,7 +41,7 @@ app.get("/alive",(req,res) => {
 // Routing
 app.use("/user", user);
 app.use("/recipes", recipes);
-// app.use(auth); //without prefix! 
+app.use("/guest",guest); 
 
 //Default Router
 app.use((req,res) => {
