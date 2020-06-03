@@ -12,18 +12,23 @@ router.use(async(req,res,next)=>{
     const id = req.session.user_id;
     const user =await user_util.checkId(id);
     if(user){
-      req.user=user;
+      req.user=user[0].user_id;
       next();
     }
   }else{
      res.sendStatus(401);   
   }
 });
-
-router.get("/recipeInfo/:ids",(req,res)=>{
-  const ids = JSON.parse(req.params.ids);
+router.get('/lastseen', async(req, res) => {
   const user_id = req.user;
-  let info = user_util.getUserInfoOnRecipes(user_id,ids);
+  let info = await user_util.getLast3Recipes(user_id);
+  res.send(info);
+
+});
+router.get("/recipeInfo/:ids",async(req,res)=>{
+  ids = JSON.parse(req.params.ids);
+  const user_id = req.user;
+  let info = await user_util.getUserInfoOnRecipes(user_id,ids);
   res.send(info);
 });
 
