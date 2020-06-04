@@ -7,7 +7,10 @@ const axios = require("axios");
 const api_domain ="https://api.spoonacular.com/recipes";
 const api_key ="9ecddbe239e54272b89ee3234f3cb1e1";
 
-
+async function get3Random(){
+    let promises = await axios.get(`${api_domain}/random?apiKey=${api_key}&number=3`);
+    return promises.data.recipes.map((recipes_info) => extractRelventRecipeData(recipes_info));
+}
 function extractQueriesParams(query_params, search_param){
     const param_list =["diet","cuisine","intolerance"];
     param_list.forEach(element => {
@@ -33,7 +36,8 @@ function  extractFullRecipeData(recipe){
         vegan,
         vegetarian,
         extendedIngredients,
-        instructions
+        instructions,
+        servings
     } = recipe;
 
     return {
@@ -46,7 +50,8 @@ function  extractFullRecipeData(recipe){
         vegan: vegan,
         image: image,
         extendedIngredients:extendedIngredients,
-        instructions :instructions
+        instructions :instructions,
+        servings: servings
     }
 }
 
@@ -113,5 +118,6 @@ module.exports ={
     extractQueriesParams: extractQueriesParams,
     extractRelventRecipeData: extractRelventRecipeData,
     getRecipesInfo: getRecipesInfo,
-    getFullRecipe:getFullRecipe
+    getFullRecipe:getFullRecipe,
+    get3Random:get3Random
 }

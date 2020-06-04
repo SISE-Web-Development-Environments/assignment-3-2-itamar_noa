@@ -39,6 +39,14 @@ router.get('/recipepage/:id', (req, res) => {
         next(error);
       });
 });
+router.get('/randomrecipe', (req, res) => {
+    search_util
+    .get3Random()
+    .then((info_array) => res.status(200).send(info_array))
+    .catch(function (error) {
+        next(error);
+      });
+});
 
 
 

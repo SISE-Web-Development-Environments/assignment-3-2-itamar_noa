@@ -8,17 +8,19 @@ const api_domain = "https://api.spoonacular.com/recipes";
 const api_key = "368146e9ec544eb59c837564419c9b6c";
 
 async function getUserInfoOnRecipes(userid, ids) {/// arrays?!
-    let promises = [];
-    promises.push(await releventDataForUser(ids, userid));
-
+    let promises = {};
+    for (const key in ids) {
+        promises[ids[key]]= await releventDataForUser(ids[key], userid);
+    }
+    
     return promises;
 }
 async function releventDataForUser(element, userid) {
     let ans = (
         await DButils.execQuery(
-            `SELECT recipe_id,watched,favorite FROM dbo.recipe_data_user WHERE user_id = '${userid}' AND recipe_id= '${element}'`
+            `SELECT watched,favorite FROM dbo.recipe_data_user WHERE user_id = '${userid}' AND recipe_id= '${element}'`
         ));
-    return ans;
+    return ans[0];
 }
 async function checkId(user) {
     const dbuser = (
