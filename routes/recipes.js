@@ -29,6 +29,16 @@ router.get('/search/query/:searchQuery/amount/:num', (req, res, next) => {
         next(error);
       });
 });
+router.get('/recipepage/:id', (req, res) => {
+    const {id} = req.params;
+    searchid = id;
+    search_util
+    .getFullRecipe(searchid)
+    .then((info_array) => res.status(200).send(info_array))
+    .catch(function (error) {
+        next(error);
+      });
+});
 
 
 

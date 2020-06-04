@@ -5,7 +5,7 @@ const axios = require("axios");
 
 
 const api_domain ="https://api.spoonacular.com/recipes";
-const api_key ="368146e9ec544eb59c837564419c9b6c";
+const api_key ="9ecddbe239e54272b89ee3234f3cb1e1";
 
 
 function extractQueriesParams(query_params, search_param){
@@ -17,6 +17,37 @@ function extractQueriesParams(query_params, search_param){
     });
 
     console.log(search_param);
+}
+async function getFullRecipe(id){
+    let promise =await  axios.get(`${api_domain}/${id}/information?apiKey=${api_key}&instructionRequire=true`);
+    return  extractFullRecipeData(promise.data);
+}
+function  extractFullRecipeData(recipe){
+    const {
+        id,
+        title,
+        image,
+        readyInMinutes,
+        aggregateLikes,
+        glutenFree,
+        vegan,
+        vegetarian,
+        extendedIngredients,
+        instructions
+    } = recipe;
+
+    return {
+        id: id,
+        title: title,
+        readyInMinutes: readyInMinutes,
+        aggregateLikes: aggregateLikes,
+        vegetarian: vegetarian,
+        glutenFree: glutenFree,
+        vegan: vegan,
+        image: image,
+        extendedIngredients:extendedIngredients,
+        instructions :instructions
+    }
 }
 
 async function getRecipesInfo(recipes_id_list){
@@ -82,4 +113,5 @@ module.exports ={
     extractQueriesParams: extractQueriesParams,
     extractRelventRecipeData: extractRelventRecipeData,
     getRecipesInfo: getRecipesInfo,
+    getFullRecipe:getFullRecipe
 }
