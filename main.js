@@ -27,7 +27,6 @@ app.use(bodyParser.json());
 // );
 
 //    Import resources
-// const auth = require("./routes/auth");
 const user = require("./routes/user");
 const recipes = require("./routes/recipes");
 const guest = require("./routes/guest")

@@ -41,8 +41,16 @@ async function getLast3Recipes(user_id) {
     });
     return await recipesGetter.getRecipesInfo(arr);
 }
+async function getAllFaves(recipe_ids) {
+    let arr = [];
+    recipe_ids.forEach(element => {
+        arr.push(element.recipe_id);
+    });
+    return await recipesGetter.getRecipesInfo(arr);
+}
 module.exports = {
     getUserInfoOnRecipes: getUserInfoOnRecipes,
     checkId: checkId,
-    getLast3Recipes: getLast3Recipes
+    getLast3Recipes: getLast3Recipes,
+    getAllFaves:getAllFaves
 }

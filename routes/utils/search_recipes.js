@@ -23,7 +23,10 @@ function extractQueriesParams(query_params, search_param){
 }
 async function getFullRecipe(id){
     let promise =await  axios.get(`${api_domain}/${id}/information?apiKey=${api_key}&instructionRequire=true`);
-    return  extractFullRecipeData(promise.data);
+    let ans =  extractFullRecipeData(promise.data);
+    ans.extendedIngredients = ans.extendedIngredients.map(({ name: name, unit: unit ,amount:amount}) =>
+     ({name, unit,amount}));
+    return ans;
 }
 function  extractFullRecipeData(recipe){
     const {
@@ -39,7 +42,7 @@ function  extractFullRecipeData(recipe){
         instructions,
         servings
     } = recipe;
-
+   
     return {
         id: id,
         title: title,
