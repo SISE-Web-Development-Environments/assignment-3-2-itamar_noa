@@ -23,6 +23,7 @@
     "express-session": "^1.17.1",
     "morgan": "^1.10.0",
     "mssql": "^6.2.0",
+    "path": "^0.12.7",
     "request": "^2.88.2",
     "tedious": "^8.3.0",
     "tedious-connection-pool": "^1.0.5"
