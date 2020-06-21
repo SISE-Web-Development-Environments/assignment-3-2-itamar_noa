@@ -1,0 +1,642 @@
+openapi: 3.0.0
+info:
+  title: Cooking and Sharing
+  description: recepies site API for user,recepies and expereince integreation
+  contact:
+    name: Itamar Zigel & Noa Weiss
+    email: zigelitamar@gmail.com
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/zigelitamar/RecepiesAPI/1.0.0
+  description: SwaggerHub API Auto Mocking
+tags:
+- name: user
+  description: ' subscribed users of the system'
+- name: recipes
+  description: ' Recepies uploaoded to server'
+paths:
+  /recipes/randomrecipe:
+    get:
+      tags:
+      - recipes
+      summary: get 3 random rcipes
+      description: via specified click gives the user 3 random and popular recipes
+      responses:
+        "200":
+          description: successful operation ,returned 3 random popular recipes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/prev_recipe'
+  /recipes/search/query/:searchQuery/amount/:num:
+    get:
+      tags:
+      - recipes
+      summary: find recpie by name
+      description: uses the search bar to return relevent resaults
+      parameters:
+      - name: searchQuery
+        in: path
+        description: simpale query
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          properties:
+            query:
+              type: string
+              example: thai
+      - name: num
+        in: path
+        description: 5 ,10 or 15 recipes
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+          default: 5
+          enum:
+          - 5
+          - 10
+          - 15
+      - name: cuisine
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Cuisune'
+      - name: diet
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Diet'
+      - name: intolerances
+        in: query
+        required: false
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Intolerances'
+      responses:
+        "200":
+          description: succesfully find recipes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/prev_recipe'
+        "204":
+          description: no resaults for query
+  /recipes/recipepage/:id:
+    get:
+      tags:
+      - recipes
+      summary: returns full info on recipe
+      description: return full data including ingredients and instructions of recipe
+      parameters:
+      - name: id
+        in: path
+        description: recipe id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: "2342342"
+      responses:
+        "200":
+          description: successful operation ,returned 3 random popular recipes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/recipe'
+  /guest/register:
+    post:
+      summary: register to the site
+      description: register the site
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+        required: true
+      responses:
+        "200":
+          description: successful operation
+        "400":
+          description: user name taken or bad information
+  /guest/login:
+    post:
+      summary: login to the site
+      description: login the site
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/body'
+        required: true
+      responses:
+        "200":
+          description: successful operation , user authenticated under coockie named
+            session ID will  be available
+          headers:
+            Set-Cookie:
+              style: simple
+              explode: false
+              schema:
+                type: string
+                example: session =asdf87sdfjhsdf8dkFDfsd7
+        "401":
+          description: 'user name taken or bad information, authentocation failed '
+  /guest/logout:
+    get:
+      summary: logout
+      description: log out from the user back to main page
+      operationId: logout
+      responses:
+        "200":
+          description: Success
+        "400":
+          description: Not logged In
+  /user/getFavorites:
+    get:
+      tags:
+      - user
+      summary: return favorite recipes
+      description: all the user choosen favorites are returnred
+      responses:
+        "200":
+          description: successful operation ,returned favorites
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/recipe'
+      security:
+      - cookieAuth: []
+  /user/lastseen:
+    get:
+      tags:
+      - user
+      summary: return 3 recipes
+      description: the user last seen 3 recipes are returnred
+      responses:
+        "200":
+          description: successful operation ,returned ownrecipes
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/recipe'
+      security:
+      - cookieAuth: []
+  /user/addFavoriteRecipe:
+    post:
+      tags:
+      - user
+      summary: add favorite recipe
+      description: add choosen recipe to my favorite page
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              example: "3242322"
+        required: true
+      responses:
+        "200":
+          description: successful operation ,added to favorites
+      security:
+      - cookieAuth: []
+  /user/addWatch:
+    post:
+      tags:
+      - user
+      summary: add to watched recipe
+      description: add choosen recipe to my watched list
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: string
+              example: "3242322"
+        required: true
+      responses:
+        "200":
+          description: successful operation ,added to watched
+      security:
+      - cookieAuth: []
+  /user/recipeInfo/:ids:
+    get:
+      tags:
+      - user
+      summary: watched and favorite?
+      description: given few ids returns if a user watched those recipes and/or added
+        them to favorites
+      parameters:
+      - name: ids
+        in: path
+        description: recipe id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: array
+          example:
+          - "2342342"
+          - "435345"
+          items:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  properties:
+                    watched:
+                      type: boolean
+                    favorite:
+                      type: boolean
+                example:
+                  "23":
+                    watched: true
+                    favorite: true
+                  "29":
+                    watched: true
+                    favorite: false
+      security:
+      - cookieAuth: []
+  /user/getpersonalrecipes:
+    get:
+      tags:
+      - user
+      summary: get personal recipes
+      description: get personal recipes previews
+      responses:
+        "200":
+          description: 'successful operation '
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200'
+      security:
+      - cookieAuth: []
+  /user/getfamilyrecipes:
+    get:
+      tags:
+      - user
+      summary: get family recipes
+      description: get family recipes previews
+      responses:
+        "200":
+          description: 'successful operation '
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/inline_response_200_1'
+      security:
+      - cookieAuth: []
+  /user/fullPersonalRecipe/:id:
+    get:
+      tags:
+      - user
+      summary: get personal recipes
+      description: get personal recipes as a whole
+      parameters:
+      - name: id
+        in: path
+        description: recipe id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: "2342342"
+      responses:
+        "200":
+          description: 'successful operation '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_2'
+      security:
+      - cookieAuth: []
+  /user/fullfamilylRecipe/:id:
+    get:
+      tags:
+      - user
+      summary: get family recipes
+      description: get family recipes as a whole
+      parameters:
+      - name: id
+        in: path
+        description: recipe id
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: "2342342"
+      responses:
+        "200":
+          description: 'successful operation '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/inline_response_200_3'
+      security:
+      - cookieAuth: []
+components:
+  schemas:
+    recipe:
+      type: object
+      properties:
+        image:
+          type: string
+        title:
+          type: string
+          example: Lemon Cake
+        readyinminutes:
+          type: integer
+          example: 30
+        aggregateLikes:
+          type: integer
+          example: 1500
+        vegeterian:
+          type: boolean
+          example: true
+        vegan:
+          type: boolean
+        glutenfree:
+          type: boolean
+          example: true
+        ingrediants:
+          type: array
+          properties:
+            name:
+              type: string
+            unit:
+              type: string
+            quantity:
+              type: integer
+          example:
+          - Lemons: 4 table spoons
+          - Pudding: 4 table spoons
+          - Crumble: 4 table spoons
+          items:
+            type: object
+        instructions:
+          type: string
+          example: you take all the ingrediants togther and oreder  pizza
+        servings:
+          type: integer
+          example: 8
+    prev_recipe:
+      type: object
+      properties:
+        image:
+          type: string
+        title:
+          type: string
+          example: Lemon Cake
+        readyinminutes:
+          type: integer
+          example: 30
+        aggregateLikes:
+          type: integer
+          example: 1500
+        vegeterian:
+          type: boolean
+          example: true
+        vegan:
+          type: boolean
+        glutenfree:
+          type: boolean
+          example: true
+    Cuisune:
+      type: string
+      enum:
+      - African
+      - American
+      - British
+      - Cajun
+      - Caribbean
+      - Chinese
+      - Eastern European
+      - European
+      - French
+      - German
+      - Greek
+      - Indian
+      - Irish
+      - Italian
+      - Japanese
+      - Jewish
+      - Korean
+      - Latin American
+      - Mediterranean
+      - Mexican
+      - Middle Eastern
+      - Nordic
+      - Southern
+      - Spanish
+      - Thai
+      - Vietnamese
+    Diet:
+      type: string
+      enum:
+      - Gluten Free
+      - Ketogenic
+      - Vegetarian
+      - Lacto-Vegetarian
+      - Ovo-Vegetarian
+      - Vegan
+      - Pescetarian
+      - Paleo
+      - Primal
+      - Whole30
+    Intolerances:
+      type: string
+      enum:
+      - Dairy
+      - Egg
+      - Gluten
+      - Grain
+      - Peanut
+      - Seafood
+      - Sesame
+      - Shellfish
+      - Soy
+      - Sulfite
+      - Tree Nut
+      - Wheat
+    user:
+      type: object
+      properties:
+        username:
+          maxLength: 8
+          minLength: 3
+          type: string
+          example: Itamar115
+        password:
+          maxLength: 10
+          minLength: 5
+          type: string
+          description: at least one numeric ,letter and spical letter
+          example: erf!546yj
+        confirmpassword:
+          type: string
+          example: erf!546yj
+        firstname:
+          type: string
+          example: ita
+        lastname:
+          type: string
+          example: noa
+        user_id:
+          type: string
+          example: FA9BE29B-8922-4FD4-867D-20EF17586BD4
+        email:
+          type: string
+          example: itamarandnoa@gmailz.com
+        country:
+          type: string
+          example: Israel
+        profilepic:
+          type: string
+          example: www.profilepic.com
+    body:
+      type: object
+      properties:
+        username:
+          type: string
+          example: noanoanoa
+        password:
+          type: string
+          example: noathequeen5
+    inline_response_200:
+      type: object
+      properties:
+        recipe_id:
+          type: string
+          example: 410B58A2-A5DC-4608-8E3A-4F0E100AB477
+        recipename:
+          type: string
+          example: falafel
+        duration:
+          type: string
+          example: 30 minutes
+        image:
+          type: string
+          example: www.bestpicever.com
+    inline_response_200_1:
+      type: object
+      properties:
+        recipe_id:
+          type: string
+          example: 410B58A2-A5DC-4608-8E3A-4F0E100AB477
+        recipename:
+          type: string
+          example: falafel
+        duration:
+          type: string
+          example: 30 minutes
+        image:
+          type: string
+          example: www.bestpicever.com
+        author:
+          type: string
+          example: savta
+        occasions:
+          type: string
+          example: saturdays
+    inline_response_200_2:
+      type: object
+      properties:
+        recipename:
+          type: string
+          example: falafel
+        duration:
+          type: string
+          example: 30 minutes
+        image:
+          type: string
+          example: www.bestpicever.com
+        instructions:
+          type: string
+          example: jusr order somthing
+        ingrediants:
+          type: array
+          properties:
+            name:
+              type: string
+            unit:
+              type: string
+            quantity:
+              type: integer
+          example:
+          - Lemons: 4 table spoons
+          - Pudding: 4 table spoons
+          - Crumble: 4 table spoons
+          items:
+            type: object
+    inline_response_200_3:
+      type: object
+      properties:
+        recipename:
+          type: string
+          example: falafel
+        duration:
+          type: string
+          example: 30 minutes
+        image:
+          type: string
+          example: www.bestpicever.com
+        instructions:
+          type: string
+          example: jusr order somthing
+        author:
+          type: string
+          example: savta
+        occasions:
+          type: string
+          example: saturdays
+        ingrediants:
+          type: array
+          properties:
+            name:
+              type: string
+            unit:
+              type: string
+            quantity:
+              type: integer
+          example:
+          - Lemons: 4 table spoons
+          - Pudding: 4 table spoons
+          - Crumble: 4 table spoons
+          items:
+            type: object
+  securitySchemes:
+    coockieAuth:
+      type: apiKey
+      name: session
+      in: cookie
