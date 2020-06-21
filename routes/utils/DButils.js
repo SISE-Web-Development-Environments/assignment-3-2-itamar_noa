@@ -1,4 +1,4 @@
-require('dotenv').config();
+require("dotenv").config();
 const sql_server = require("mssql");
 
 //  const config = {
@@ -11,35 +11,30 @@ const sql_server = require("mssql");
 //   }
 // };
 const config = {
-  user: 'ex3-admin',
-  password: 'Itamarnoa123',
-  server: 'ex3-server.database.windows.net',
-  database: '3.2',
+  server: process.env.HOST,
+  user: process.env.USER,
+  password: process.env.PASS,
+  database: process.env.NAME,
   options: {
     encrypt: true,
-    enableArithAbort: true
+    enableArithAbort: true,
+  },
+};
+
+const pool = new sql_server.ConnectionPool(config);
+const connection = pool.connect().catch((error) => {
+  console.log(error, "Promise error");
+});
+
+async function execQuery(query) {
+  await connection;
+  try {
+    var result = await pool.request().query(query);
+    return result.recordset;
+  } catch (err) {
+    console.error("SQL error", err);
+    throw err;
   }
 }
 
-    const pool = new sql_server.ConnectionPool(config);
-    const connection = pool.connect()
-    .catch((error) => {
-      console.log(error,'Promise error');
-
-    });
-    
-    
-
-   async function execQuery(query) {
-        await connection;
-        try {
-          var result = await pool.request().query(query);
-          return result.recordset;
-        } catch (err) {
-          console.error("SQL error", err);
-          throw err;
-        }
-      };
-
-      module.exports.execQuery = execQuery;
-
+module.exports.execQuery = execQuery;

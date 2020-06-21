@@ -5,10 +5,11 @@ const logger = require("morgan");
 const session = require("client-sessions");
 var cookieParser = require("cookie-parser");
 const path = require("path");
+require("dotenv").config();
 
 // Application settings
 const app = express();
-const port = 5000;
+const port = process.env.PORT;
 
 app.use(logger("dev")); //logger
 app.use(express.json()); // parse application/json
@@ -21,6 +22,14 @@ app.use(
     //the session will be extended by activeDuration milliseconds
   })
 );
+const corsConfig = {
+  origin: true,
+  credentials: true,
+};
+
+app.use(cors(corsConfig));
+app.options("*", cors(corsConfig));
+
 app.use(express.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
 app.use(express.static(path.join(__dirname, "public"))); //To serve static files such as images, CSS files, and JavaScript files
 
