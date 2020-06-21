@@ -5,6 +5,7 @@ const logger = require("morgan");
 const session = require("client-sessions");
 var cookieParser = require("cookie-parser");
 const path = require("path");
+const cors = require("cors");
 require("dotenv").config();
 
 // Application settings
