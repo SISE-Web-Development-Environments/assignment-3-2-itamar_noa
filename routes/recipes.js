@@ -16,7 +16,6 @@ router.get("/search/query/:searchQuery/amount/:num", (req, res, next) => {
   search_params.query = searchQuery;
   search_params.number = num;
   search_params.instructionsRequired = true;
-
   console.log(req.query);
 
   search_util.extractQueriesParams(req.query, search_params);

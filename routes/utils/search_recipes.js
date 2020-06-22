@@ -108,8 +108,8 @@ function extractRelventRecipeData(recipes_info) {
     vegan,
     vegetarian,
   } = recipes_info;
-  let map = {};
-  map[id] = {
+  return {
+    id: id,
     title: title,
     readyInMinutes: readyInMinutes,
     aggregateLikes: aggregateLikes,
@@ -118,7 +118,16 @@ function extractRelventRecipeData(recipes_info) {
     vegan: vegan,
     image: image,
   };
-  return map;
+  // map[id] = {
+  //   title: title,
+  //   readyInMinutes: readyInMinutes,
+  //   aggregateLikes: aggregateLikes,
+  //   vegetarian: vegetarian,
+  //   glutenFree: glutenFree,
+  //   vegan: vegan,
+  //   image: image,
+  // };
+  // return map;
 }
 function extractSearchResultsIds(search_respone) {
   const id_list = [];
