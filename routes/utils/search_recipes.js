@@ -46,6 +46,7 @@ function extractFullRecipeData(recipe) {
     vegetarian,
     extendedIngredients,
     instructions,
+    analyzedInstructions,
     servings,
   } = recipe;
 
@@ -60,6 +61,7 @@ function extractFullRecipeData(recipe) {
     image: image,
     extendedIngredients: extendedIngredients,
     instructions: instructions,
+    analyzedInstructions: analyzedInstructions,
     servings: servings,
   };
 }
