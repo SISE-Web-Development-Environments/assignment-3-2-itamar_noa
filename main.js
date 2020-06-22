@@ -30,6 +30,8 @@ const corsConfig = {
   origin: true,
   credentials: true,
 };
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.use(cors(corsConfig));
 app.options("*", cors(corsConfig));
