@@ -29,7 +29,7 @@ app.use(
   session({
     cookieName: "session", // the cookie key name
     secret: "blabla", // the encryption key
-    duration: 20 * 60 * 1000, // expired after 20 minutes
+    duration: 30 * 60 * 1000, // expired after 20 minutes
     activeDuration: 0, // if expiresIn < activeDuration,
     //the session will be extended by activeDuration milliseconds
     cookie: {
