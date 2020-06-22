@@ -12,6 +12,14 @@ require("dotenv").config();
 const app = express();
 const port = process.env.PORT;
 
+const corsConfig = {
+  origin: true,
+  credentials: true,
+};
+
+app.use(cors(corsConfig));
+app.options("*", cors(corsConfig));
+
 app.use(logger("dev")); //logger
 app.use(express.json()); // parse application/json
 app.use(
@@ -26,13 +34,6 @@ app.use(
     },
   })
 );
-const corsConfig = {
-  origin: true,
-  credentials: true,
-};
-
-app.use(cors(corsConfig));
-app.options("*", cors(corsConfig));
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
