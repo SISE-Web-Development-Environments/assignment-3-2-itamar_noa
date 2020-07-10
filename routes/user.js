@@ -70,11 +70,12 @@ router.post("/addWatch", async (req, res) => {
   );
   if (checkit.length > 0) {
     res.send({ success: true, message: "already watched" });
+  } else {
+    await DButils.execQuery(
+      `INSERT INTO dbo.recipe_data_user VALUES ('${rec_id}','${user_id}',${1},${0})`
+    );
+    res.send({ success: true, message: "recipe added succsessfully" });
   }
-  await DButils.execQuery(
-    `INSERT INTO dbo.recipe_data_user VALUES ('${rec_id}','${user_id}',${1},${0})`
-  );
-  res.send({ success: true, message: "recipe added succsessfully" });
 });
 router.get("/getpersonalrecipes", async (req, res) => {
   const user_id = req.user;
