@@ -66,7 +66,7 @@ router.post("/addWatch", async (req, res) => {
   const rec_id = req.body.id;
   const user_id = req.user;
   const checkit = await DButils.execQuery(
-    `SELECT rec_id from dbo.recipe_data_user WHERE user_id ='${user_id}' AND watched= ${1}`
+    `SELECT recipe_id from dbo.recipe_data_user WHERE user_id ='${user_id}' AND watched= ${1} AND recipe_id = '${rec_id}'`
   );
   if (checkit.length > 0) {
     res.send({ success: true, message: "already watched" });
