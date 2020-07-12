@@ -5,7 +5,7 @@ const DButils = require("./DButils");
 const recipesGetter = require("./search_recipes");
 
 const api_domain = "https://api.spoonacular.com/recipes";
-const api_key = "c5cba94acfa44b3ca885be5d30ffb6ef";
+const api_key = "49aaa5634bfa4f35a664d1d187d3972c";
 
 async function getUserInfoOnRecipes(userid, ids) {
   let promises = {};
