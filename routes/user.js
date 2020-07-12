@@ -70,6 +70,7 @@ router.post("/addWatch", async (req, res) => {
   );
   if (checkit.length > 0) {
     `UPDATE dbo.recipe_data_user set add_time = GETDATE() where user_id ='${user_id}' AND recipe_id= '${rec_id}'`;
+    res.send({ success: true, message: "recipe updated succsessfully" });
   } else {
     await DButils.execQuery(
       `INSERT INTO dbo.recipe_data_user VALUES ('${rec_id}','${user_id}',${1},${0},GETDATE())`
