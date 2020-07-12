@@ -30,7 +30,7 @@ async function checkId(user) {
 }
 async function getLast3Recipes(user_id) {
   const dbuser = await DButils.execQuery(
-    `SELECT TOP (3) recipe_id FROM dbo.recipe_data_user WHERE user_id = '${user_id}'`
+    `SELECT TOP (3) recipe_id FROM dbo.recipe_data_user WHERE user_id = '${user_id}' ORDER BY add_time DESC `
   );
   let arr = [];
   dbuser.forEach((element) => {

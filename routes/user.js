@@ -69,10 +69,10 @@ router.post("/addWatch", async (req, res) => {
     `SELECT recipe_id from dbo.recipe_data_user WHERE user_id ='${user_id}' AND watched= ${1} AND recipe_id = '${rec_id}'`
   );
   if (checkit.length > 0) {
-    res.send({ success: true, message: "already watched" });
+    `UPDATE dbo.recipe_data_user set add_time = GETDATE() where user_id ='${user_id}' AND recipe_id= '${rec_id}'`;
   } else {
     await DButils.execQuery(
-      `INSERT INTO dbo.recipe_data_user VALUES ('${rec_id}','${user_id}',${1},${0})`
+      `INSERT INTO dbo.recipe_data_user VALUES ('${rec_id}','${user_id}',${1},${0},GETDATE())`
     );
     res.send({ success: true, message: "recipe added succsessfully" });
   }
