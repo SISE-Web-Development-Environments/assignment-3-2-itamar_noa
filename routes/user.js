@@ -44,7 +44,7 @@ router.post("/addFavoriteRecipe", async (req, res) => {
     );
   } else {
     await DButils.execQuery(
-      `INSERT INTO dbo.recipe_data_user VALUES ('${rec_id}','${user_id}',${1},${1})`
+      `INSERT INTO dbo.recipe_data_user VALUES ('${rec_id}','${user_id}',${1},${1},GETDATE())`
     );
   }
   res.send({ success: true, message: "recipe added succsessfully" });
