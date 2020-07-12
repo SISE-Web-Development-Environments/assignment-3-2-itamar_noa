@@ -104,8 +104,8 @@ router.get("/fullPersonalRecipe/:id", async (req, res) => {
   const { id } = req.params;
   recipeId = id;
   const user_id = req.user;
-  const ans = {};
-  let returnVal = await DButils.execQuery(`SELECT  recipe_name,duration,image,instructions 
+  let ans = {};
+  let returnVal = await DButils.execQuery(`SELECT recipe_name,duration,image,instructions 
     from dbo.personal_recipes
     WHERE user_id ='${user_id}' AND recipe_id='${recipeId}' AND family=${0}`);
   if (returnVal.length == 0) {
