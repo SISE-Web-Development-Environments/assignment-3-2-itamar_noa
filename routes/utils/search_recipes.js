@@ -3,7 +3,7 @@ var router = express.Router();
 const axios = require("axios");
 
 const api_domain = "https://api.spoonacular.com/recipes";
-const api_key = "4b64b6b2b47242ce9b2583b0b1950cdb";
+const api_key = "9020471b054d47a69c35d39e47668fa2";
 
 async function get3Random() {
   let promises = await axios.get(
