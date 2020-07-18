@@ -22,7 +22,11 @@ router.use(async (req, res, next) => {
 router.get("/lastseen", async (req, res) => {
   const user_id = req.user;
   let info = await user_util.getLast3Recipes(user_id);
-  res.send(info);
+  if (info.length > 0) {
+    res.send(info);
+  } else {
+    res.sendStatus(204);
+  }
 });
 router.get("/recipeInfo/:ids", async (req, res) => {
   ids = JSON.parse(req.params.ids);
@@ -58,7 +62,7 @@ router.get("/getFavorites", async (req, res) => {
     let ans = await user_util.getAllFaves(faveIds);
     res.send(ans);
   } else {
-    res.sendStatus(409);
+    res.sendStatus(204);
   }
 });
 
@@ -95,7 +99,7 @@ router.get("/getfamilyrecipes", async (req, res) => {
     `SELECT dbo.personal_recipes.recipe_id,dbo.personal_recipes.recipe_name,dbo.personal_recipes.duration,dbo.personal_recipes.image,dbo.family_recipes.author,dbo.family_recipes.occasions from dbo.personal_recipes,dbo.family_recipes WHERE dbo.personal_recipes.recipe_id=dbo.family_recipes.recipe_id AND dbo.personal_recipes.user_id ='${user_id}' AND family=${1}`
   );
   if (returnVal.length == 0) {
-    res.sendStatus(401);
+    res.sendStatus(204);
   } else {
     res.send(returnVal);
   }
