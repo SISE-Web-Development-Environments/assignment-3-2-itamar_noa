@@ -84,7 +84,7 @@ router.get("/getpersonalrecipes", async (req, res) => {
     from dbo.personal_recipes
     WHERE user_id ='${user_id}' AND family=${0}`);
   if (returnVal.length == 0) {
-    res.sendStatus(401);
+    res.sendStatus(204);
   } else {
     res.send(returnVal);
   }
