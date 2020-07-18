@@ -14,7 +14,7 @@ async function get3Random() {
   );
 }
 function extractQueriesParams(query_params, search_param) {
-  const param_list = ["diet", "cuisine", "intolerance"];
+  const param_list = ["diet", "cuisine", "intolerances"];
   param_list.forEach((element) => {
     if (query_params[element]) {
       search_param[element] = query_params[element];
