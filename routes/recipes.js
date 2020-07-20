@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+var app = express();
 
 const search_util = require("./utils/search_recipes");
 
@@ -27,7 +28,7 @@ router.get("/search/query/:searchQuery/amount/:num", (req, res, next) => {
       next(error);
     });
 });
-router.get("/recipepage/:id", (req, res) => {
+router.get("/recipepage/:id", (req, res, next) => {
   const { id } = req.params;
   searchid = id;
   search_util
@@ -37,13 +38,18 @@ router.get("/recipepage/:id", (req, res) => {
       next(error);
     });
 });
-router.get("/randomrecipe", (req, res) => {
+router.get("/randomrecipe", (req, res, next) => {
   search_util
     .get3Random()
     .then((info_array) => res.status(200).send(info_array))
     .catch(function (error) {
       next(error);
     });
+});
+app.use(function (err, req, res, next) {
+  res
+    .status(err.status || 500)
+    .send({ message: err.message || "Some thing went wrong", success: false });
 });
 
 module.exports = router;
